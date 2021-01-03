@@ -2,6 +2,7 @@ let board = [[0], [0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
 const board_copy = [[0], [0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
 let currentplayer = 1;
 let firstSelection = true;
+// selection[first / second][x / y]
 let selections = [
   [0, 0],
   [0, 0],
@@ -142,12 +143,8 @@ function changePlayer(player) {
   } else {
     if (currentplayer == 1) {
       currentplayer = 2;
-      turn_text.innerText = 'Red';
-      turn_text.classList.replace('blue', 'red');
     } else {
       currentplayer = 1;
-      turn_text.innerText = 'Blue';
-      turn_text.classList.replace('red', 'blue');
     }
   }
 }
@@ -167,12 +164,12 @@ function checkForWin() {
       var winner = 1;
     }
     popup(playerTranslation[winner] + ' won!');
+    // Reset Board
     board = JSON.parse(JSON.stringify(board_copy));
-    updateUi();
   }
 }
 function popup(messageText, remove) {
-  if (remove != true) {
+  if (!remove) {
     overlay.classList.add('active');
   } else {
     overlay.classList.remove('active');
@@ -196,22 +193,35 @@ function updateUi() {
         break;
     }
   });
+  if (currentplayer == 2) {
+    turn_text.innerText = 'Red';
+    turn_text.classList.replace('blue', 'red');
+  } else {
+    turn_text.innerText = 'Blue';
+    turn_text.classList.replace('red', 'blue');
+  }
 }
 
 lines.forEach((line) => {
   line.addEventListener('click', () => {
     n = parseInt(line.id.replace('line', ''));
     c = numToCoordinate(n);
+    // Check if position unclaimed
     if (board[c[1]][c[0]] != 0) return;
     if (firstSelection) {
       selections[0] = c;
     } else {
       selections[1] = c;
+
+      // Check if selection are in the same line
       if (selections[0][1] != selections[1][1]) {
         firstSelection = true;
         return;
       }
+
+      // determine the length of selection
       diff = Math.abs(selections[0][0] - selections[1][0]) + 1;
+      // test if valid selection
       y = selections[0][1];
       for (var i = 0; i < diff; i++) {
         x = Math.min(selections[0][0], selections[1][0]) + i;
@@ -220,6 +230,7 @@ lines.forEach((line) => {
           return;
         }
       }
+      // save current turn
       for (var i = 0; i < diff; i++) {
         x = Math.min(selections[0][0], selections[1][0]) + i;
         board[y][x] = currentplayer;
