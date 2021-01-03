@@ -1,0 +1,214 @@
+:root {
+  --fg-color: rgb(0, 109, 211);
+  --bg-color: rgb(75, 75, 75);
+  --p1-color: blue;
+  --p2-color: red;
+}
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+header {
+  display: flex;
+  padding: 2vw;
+  justify-content: space-between;
+  background-color: var(--bg-color);
+  height: 15%;
+}
+.title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.title-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 5vh;
+  width: max-content;
+  color: white;
+}
+.turn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.turn-text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 5vh;
+  width: max-content;
+}
+.turn-text.blue {
+  color: var(--p1-color);
+}
+.turn-text.red {
+  color: var(--p2-color);
+}
+main {
+  display: flex;
+  justify-content: space-around;
+  align-content: space-around;
+  height: 90%;
+}
+.container {
+  display: grid;
+  width: 100%;
+  justify-content: center;
+  align-content: center;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  justify-items: stretch;
+  grid-template-areas:
+    '. . . . . . . . .'
+    '. . . . a . . . .'
+    '. . . b c d . . .'
+    '. . e f g h i . .'
+    '. j k l m n o p .'
+    '. . . . . . . . .';
+}
+.line {
+  border: none;
+  background-color: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+.line:hover {
+  background-color: rgba(114, 114, 114, 0.275);
+}
+.line::before {
+  content: '';
+  position: absolute;
+  background-color: var(--bg-color);
+  width: 3px;
+  height: 80%;
+  transform: translateX(-50%) translateY(-50%);
+}
+.line::after {
+  content: '';
+  position: absolute;
+  background-color: transparent;
+  width: 100%;
+  height: 2px;
+  left: 0px;
+  transform: translateY(-50%);
+}
+.line.crossed1 {
+  cursor: auto;
+}
+.line.crossed1:hover {
+  background-color: transparent;
+}
+.line.crossed1::after {
+  background-color: var(--p1-color);
+}
+.line.crossed2 {
+  cursor: auto;
+}
+.line.crossed2:hover {
+  background-color: transparent;
+}
+.line.crossed2::after {
+  background-color: var(--p2-color);
+}
+.line:active {
+  padding: 0;
+}
+.line1 {
+  grid-area: a;
+}
+.line2 {
+  grid-area: b;
+}
+.line3 {
+  grid-area: c;
+}
+.line4 {
+  grid-area: d;
+}
+.line5 {
+  grid-area: e;
+}
+.line6 {
+  grid-area: f;
+}
+.line7 {
+  grid-area: g;
+}
+.line8 {
+  grid-area: h;
+}
+.line9 {
+  grid-area: i;
+}
+.line10 {
+  grid-area: j;
+}
+.line11 {
+  grid-area: k;
+}
+.line12 {
+  grid-area: l;
+}
+.line13 {
+  grid-area: m;
+}
+.line14 {
+  grid-area: n;
+}
+.line15 {
+  grid-area: o;
+}
+.line16 {
+  grid-area: p;
+}
+.overlay {
+  display: none;
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.overlay.active {
+  display: block;
+}
+.popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  position: fixed;
+  background-color: var(--fg-color);
+  border-radius: 50px;
+  padding: 0% 10%;
+  left: 20%;
+  top: 30%;
+  right: 20%;
+  bottom: 30%;
+}
+.message {
+  width: 100%;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 5vh;
+  color: rgb(214, 214, 214);
+}
+.ok {
+  width: 100%;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 3vh;
+  height: 50px;
+  border: none;
+  background-color: var(--bg-color);
+  color: rgb(214, 214, 214);
+  border-radius: 25px;
+}
