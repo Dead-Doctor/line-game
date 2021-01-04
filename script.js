@@ -2,19 +2,25 @@ let board = [[0], [0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
 const board_copy = [[0], [0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]];
 let currentplayer = 1;
 let firstSelection = true;
-// selection[first / second][x / y]
+// selections[first / second][y / x]
 let selections = [
   [0, 0],
   [0, 0],
 ];
+let selCoordinate = [0, 0];
 const playerTranslation = ['Error', 'Blue', 'Red'];
+const animCanvas = document.querySelector('#animationCanvas');
+const main = document.querySelector('main');
+
+const turn_text = document.querySelector('.turn-text');
+
 const lines = document.querySelectorAll('.line');
 
 const overlay = document.querySelector('.overlay');
 const message = document.querySelector('.message');
 const ok = document.querySelector('.ok');
 
-const turn_text = document.querySelector('.turn-text');
+let ctx = animCanvas.getContext('2d');
 
 function numToCoordinate(n) {
   var x = 0,
@@ -34,108 +40,11 @@ function numToCoordinate(n) {
   return [x, y];
 }
 function boardByNum(n, value) {
+  var c = numToCoordinate(n);
   if (value != undefined) {
-    switch (n) {
-      case 1:
-        board[0][0] = value;
-        break;
-      case 2:
-        board[1][0] = value;
-        break;
-      case 3:
-        board[1][1] = value;
-        break;
-      case 4:
-        board[1][2] = value;
-        break;
-      case 5:
-        board[2][0] = value;
-        break;
-      case 6:
-        board[2][1] = value;
-        break;
-      case 7:
-        board[2][2] = value;
-        break;
-      case 8:
-        board[2][3] = value;
-        break;
-      case 9:
-        board[2][4] = value;
-        break;
-      case 10:
-        board[3][0] = value;
-        break;
-      case 11:
-        board[3][1] = value;
-        break;
-      case 12:
-        board[3][2] = value;
-        break;
-      case 13:
-        board[3][3] = value;
-        break;
-      case 14:
-        board[3][4] = value;
-        break;
-      case 15:
-        board[3][5] = value;
-        break;
-      case 16:
-        board[3][6] = value;
-        break;
-    }
+    board[c[1]][c[0]] = value;
   }
-  switch (n) {
-    case 1:
-      return board[0][0];
-      break;
-    case 2:
-      return board[1][0];
-      break;
-    case 3:
-      return board[1][1];
-      break;
-    case 4:
-      return board[1][2];
-      break;
-    case 5:
-      return board[2][0];
-      break;
-    case 6:
-      return board[2][1];
-      break;
-    case 7:
-      return board[2][2];
-      break;
-    case 8:
-      return board[2][3];
-      break;
-    case 9:
-      return board[2][4];
-      break;
-    case 10:
-      return board[3][0];
-      break;
-    case 11:
-      return board[3][1];
-      break;
-    case 12:
-      return board[3][2];
-      break;
-    case 13:
-      return board[3][3];
-      break;
-    case 14:
-      return board[3][4];
-      break;
-    case 15:
-      return board[3][5];
-      break;
-    case 16:
-      return board[3][6];
-      break;
-  }
+  return board[c[1]][c[0]];
 }
 function changePlayer(player) {
   if (player != undefined) {
@@ -202,15 +111,40 @@ function updateUi() {
   }
 }
 
+function animateSelection(e) {
+  selCoordinate = [e.pageX, e.pageY];
+  console.log(`1. Position: ${selCoordinate[0]}, ${selCoordinate[1]}`);
+}
+
+animCanvas.width = window.innerWidth;
+animCanvas.height = window.innerHeight;
+
+main.addEventListener('mousemove', (e) => {
+  if (!firstSelection) {
+    x = e.pageX;
+    y = e.pageY;
+    console.log(`2. Position: ${x}, ${y}`);
+    ctx.clearRect(0, 0, animCanvas.width, animCanvas.height);
+    ctx.beginPath();
+    ctx.moveTo(selCoordinate[0], selCoordinate[1]);
+    ctx.lineTo(x, y);
+    ctx.closePath();
+    ctx.stroke();
+  }
+});
+
 lines.forEach((line) => {
-  line.addEventListener('click', () => {
+  line.addEventListener('click', (e) => {
     n = parseInt(line.id.replace('line', ''));
     c = numToCoordinate(n);
     // Check if position unclaimed
     if (board[c[1]][c[0]] != 0) return;
+    // Test which selection
     if (firstSelection) {
+      animateSelection(e);
       selections[0] = c;
     } else {
+      ctx.clearRect(0, 0, animCanvas.width, animCanvas.height);
       selections[1] = c;
 
       // Check if selection are in the same line
