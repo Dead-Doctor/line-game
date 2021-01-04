@@ -12,7 +12,8 @@ const playerTranslation = ['Error', 'Blue', 'Red'];
 const animCanvas = document.querySelector('#animationCanvas');
 const main = document.querySelector('main');
 
-const turn_text = document.querySelector('.turn-text');
+const title = document.querySelector('.title');
+const turnText = document.querySelector('.turn-text');
 
 const lines = document.querySelectorAll('.line');
 
@@ -103,11 +104,11 @@ function updateUi() {
     }
   });
   if (currentplayer == 2) {
-    turn_text.innerText = 'Red';
-    turn_text.classList.replace('blue', 'red');
+    turnText.innerText = 'Red';
+    turnText.classList.replace('blue', 'red');
   } else {
-    turn_text.innerText = 'Blue';
-    turn_text.classList.replace('red', 'blue');
+    turnText.innerText = 'Blue';
+    turnText.classList.replace('red', 'blue');
   }
 }
 
@@ -131,6 +132,10 @@ main.addEventListener('mousemove', (e) => {
     ctx.closePath();
     ctx.stroke();
   }
+});
+
+title.addEventListener('click', () => {
+  location.reload();
 });
 
 lines.forEach((line) => {
